@@ -7,23 +7,23 @@ from langchain_core.prompts.chat import (
     SystemMessagePromptTemplate,
 )
 
-prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
+prompt_template = """You will receive paragraph and additional information. Modify the paragraph to include the additional information.
+If no additional information provided return the paragraph with no changes.
 
-{context}
+{paragraph}
 
-Question: {question}
+{additional_information}
 Helpful Answer:"""
 PROMPT = PromptTemplate(
-    template=prompt_template, input_variables=["context", "question"]
+    template=prompt_template, input_variables=["paragraph", "additional_information"]
 )
 
-system_template = """Use the following pieces of context to answer the user's question. 
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+system_template = """Use the following additional information to modify the paragraph. If no additional information provided return the paragraph with no changes.
 ----------------
-{context}"""
+{additional_information}"""
 messages = [
     SystemMessagePromptTemplate.from_template(system_template),
-    HumanMessagePromptTemplate.from_template("{question}"),
+    HumanMessagePromptTemplate.from_template("{paragraph}"),
 ]
 CHAT_PROMPT = ChatPromptTemplate.from_messages(messages)
 
